@@ -6,6 +6,8 @@
     "start": "next start"
   },
   "dependencies": {
+    "axios": "^0.27.2",
+    "jest": "^28.1.1",
     "mongoose": "^6.4.0",
     "next": "latest",
     "react": "^18.2.0",
