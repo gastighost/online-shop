@@ -41,8 +41,23 @@ export default NextAuth({
           throw new Error("Invalid email or password!");
         }
 
-        return dbUser;
+        return {
+          name: dbUser.username,
+        };
       },
     }),
   ],
+  callbacks: {
+    session: async ({ session }) => {
+      if (session.user) {
+        try {
+          const userId = await User.findOne({ username: session.user.name });
+          session.user.id = userId._id.toString();
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      return session;
+    },
+  },
 });
