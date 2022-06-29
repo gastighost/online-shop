@@ -1,35 +1,30 @@
 import { useEffect, useState } from "react";
 import io from "Socket.IO-client";
-let socket;
+let socket = false;
 
 function ChatPage() {
   const [input, setInput] = useState("");
   const [messageArray, setMessageArray] = useState([]);
 
   useEffect(() => {
-    const socketInitializer = async () => {
-      await fetch("/api/chat/message-route");
-      socket = io();
-
-      socket.on("connect", () => {
-        console.log("connected");
-      });
-
-      socket.on("update-message", (msg) => {
-        setMessageArray((prevMessages) => [...prevMessages, msg]);
-      });
-    };
-
-    socketInitializer();
+    if (!socket) {
+      socket = io("http://localhost:8080/");
+    }
   }, []);
+
+  useEffect(() => {
+    socket.on("chat", (msg) => {
+      setMessageArray([...messageArray, msg]);
+    });
+  }, [messageArray]);
 
   const onChangeHandler = (e) => {
     setInput(e.target.value);
   };
 
   const onClickHandler = () => {
-    setMessageArray((prevMessages) => [...prevMessages, input]);
-    socket.emit("message-send", input);
+    // setMessageArray((prevMessages) => [...prevMessages, input]);
+    socket.emit("chat", input);
     setInput("");
   };
 
