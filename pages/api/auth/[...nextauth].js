@@ -51,6 +51,7 @@ export default NextAuth({
     session: async ({ session }) => {
       if (session.user) {
         try {
+          await dbConnect();
           const userId = await User.findOne({ username: session.user.name });
           session.user.id = userId._id.toString();
         } catch (error) {
