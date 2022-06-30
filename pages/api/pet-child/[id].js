@@ -4,6 +4,19 @@ import PetChild from "../../../models/PetChild";
 export default async function handler(req, res) {
   await dbConnect();
 
+  if (req.method === "GET") {
+    try {
+      const petChildren = await PetChild.find({ parent: req.query.id });
+      res.status(200).json({
+        pet_children: petChildren.map((child) =>
+          child.toObject({ getters: true })
+        ),
+      });
+    } catch (error) {
+      res.status(500).json({ error });
+    }
+  }
+
   if (req.method === "POST") {
     const {
       firstName,
