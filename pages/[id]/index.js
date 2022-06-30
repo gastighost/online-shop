@@ -1,25 +1,26 @@
-import { useState } from 'react'
-import { useRouter } from 'next/router'
-import Link from 'next/link'
-import dbConnect from '../../lib/dbConnect'
-import Pet from '../../models/Pet'
+import { useState } from "react";
+import { useRouter } from "next/router";
+import Link from "next/link";
+import dbConnect from "../../lib/dbConnect";
+import Pet from "../../models/Pet";
+import ChildrenList from "../../components/ChildrenList";
 
 /* Allows you to view pet card info and delete pet card*/
 const PetPage = ({ pet }) => {
-  const router = useRouter()
-  const [message, setMessage] = useState('')
+  const router = useRouter();
+  const [message, setMessage] = useState("");
   const handleDelete = async () => {
-    const petID = router.query.id
+    const petID = router.query.id;
 
     try {
       await fetch(`/api/pets/${petID}`, {
-        method: 'Delete',
-      })
-      router.push('/')
+        method: "Delete",
+      });
+      router.push("/");
     } catch (error) {
-      setMessage('Failed to delete the pet.')
+      setMessage("Failed to delete the pet.");
     }
-  }
+  };
 
   return (
     <div key={pet._id}>
@@ -58,18 +59,20 @@ const PetPage = ({ pet }) => {
           </div>
         </div>
       </div>
+      <Link href={`/${router.query.id}/new`}>Create child</Link>
+      <ChildrenList petId={router.query.id} />
       {message && <p>{message}</p>}
     </div>
-  )
-}
+  );
+};
 
 export async function getServerSideProps({ params }) {
-  await dbConnect()
+  await dbConnect();
 
-  const pet = await Pet.findById(params.id).lean()
-  pet._id = pet._id.toString()
+  const pet = await Pet.findById(params.id).lean();
+  pet._id = pet._id.toString();
 
-  return { props: { pet } }
+  return { props: { pet } };
 }
 
-export default PetPage
+export default PetPage;
