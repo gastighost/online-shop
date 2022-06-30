@@ -4,9 +4,11 @@ import PetChild from "../../../models/PetChild";
 export default async function handler(req, res) {
   await dbConnect();
 
+  const { id } = req.query;
+
   if (req.method === "GET") {
     try {
-      const petChildren = await PetChild.find({ parent: req.query.id });
+      const petChildren = await PetChild.find({ parent: id });
       res.status(200).json({
         pet_children: petChildren.map((child) =>
           child.toObject({ getters: true })
@@ -28,8 +30,6 @@ export default async function handler(req, res) {
       likes,
       dislikes,
     } = req.body;
-
-    const { id } = req.query;
 
     const newPetChild = new PetChild({
       name: firstName,

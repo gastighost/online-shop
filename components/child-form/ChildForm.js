@@ -1,7 +1,9 @@
+import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 
 function ChildForm(props) {
+  const router = useRouter();
   const { petId } = props;
   const {
     register,
@@ -14,6 +16,7 @@ function ChildForm(props) {
     const response = await axios.post(`/api/pet-child/${petId}`, data);
     console.log(response.data);
     reset();
+    router.push(`/${petId}`);
   }
 
   return (

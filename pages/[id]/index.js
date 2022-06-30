@@ -59,6 +59,7 @@ const PetPage = ({ pet }) => {
           </div>
         </div>
       </div>
+      <Link href={`/${router.query.id}/new`}>Create child</Link>
       <ChildrenList petId={router.query.id} />
       {message && <p>{message}</p>}
     </div>
