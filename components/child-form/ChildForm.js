@@ -7,11 +7,13 @@ function ChildForm(props) {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
 
   async function onSubmit(data) {
     const response = await axios.post(`/api/pet-child/${petId}`, data);
     console.log(response.data);
+    reset();
   }
 
   return (
