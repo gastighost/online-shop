@@ -1,3 +1,4 @@
+import Link from "next/link";
 import axios from "axios";
 import useSWR from "swr";
 
@@ -19,11 +20,13 @@ function ChildrenList(props) {
     <div>
       {data?.pet_children.map((child) => {
         return (
-          <div key={child.id}>
-            <h3>Name: {child.name}</h3>
-            <p>Specie: {child.species}</p>
-            <p>Age: {child.age}</p>
-          </div>
+          <Link key={child.id} href={`/${petId}/${child.id}`}>
+            <div>
+              <h3>Name: {child.name}</h3>
+              <p>Specie: {child.species}</p>
+              <p>Age: {child.age}</p>
+            </div>
+          </Link>
         );
       })}
     </div>
