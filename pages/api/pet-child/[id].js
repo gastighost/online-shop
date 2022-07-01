@@ -93,4 +93,15 @@ export default async function handler(req, res) {
       res.status(500).json({ error });
     }
   }
+
+  if (req.method === "DELETE") {
+    try {
+      await PetChild.findByIdAndDelete(id);
+      console.log("Pet child successfully deleted via Mongoose!");
+      res.status(200).json({ message: "Pet child successfully deleted!" });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error });
+    }
+  }
 }

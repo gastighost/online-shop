@@ -1,5 +1,7 @@
 import Link from "next/link";
+import axios from "axios";
 import { useState } from "react";
+import { useRouter } from "next/router";
 import ChildUpdateForm from "../../../components/child-form/ChildUpdateForm";
 import ChildDetails from "../../../components/ChildDetails";
 
@@ -7,6 +9,7 @@ import dbConnect from "../../../lib/dbConnect";
 import PetChild from "../../../models/PetChild";
 
 function PetChildPage(props) {
+  const router = useRouter();
   const { id, petChild, petChildId } = props;
   const [isEditing, setIsEditing] = useState(false);
 
@@ -16,6 +19,11 @@ function PetChildPage(props) {
 
   function editModeOff() {
     setIsEditing(false);
+  }
+
+  async function deletePetChild(childId) {
+    const response = await axios.delete(`/api/pet-child/${childId}`);
+    router.push(`/${id}`);
   }
 
   return (
@@ -30,6 +38,9 @@ function PetChildPage(props) {
         />
       )}
       {!isEditing && <button onClick={editModeOn}>Edit</button>}
+      {!isEditing && (
+        <button onClick={() => deletePetChild(petChildId)}>Delete</button>
+      )}
       <Link href={`/${id}`}>Back</Link>
     </div>
   );
