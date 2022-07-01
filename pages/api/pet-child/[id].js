@@ -55,4 +55,53 @@ export default async function handler(req, res) {
       res.status(500).json({ error });
     }
   }
+
+  if (req.method === "PATCH") {
+    const {
+      firstName,
+      species,
+      age,
+      poddyTrained,
+      diet,
+      imageUrl,
+      likes,
+      dislikes,
+    } = req.body;
+
+    try {
+      const petChildForUpdate = await PetChild.findById(id);
+
+      petChildForUpdate.name = firstName;
+      petChildForUpdate.species = species;
+      petChildForUpdate.age = Number(age);
+      petChildForUpdate.poddy_trained = poddyTrained === "true" ? true : false;
+      petChildForUpdate.diet = diet;
+      petChildForUpdate.image_url = imageUrl;
+      petChildForUpdate.likes = likes;
+      petChildForUpdate.dislikes = dislikes;
+
+      await petChildForUpdate.save();
+
+      console.log("Pet child successfully updated via Mongoose!");
+
+      res.status(200).json({
+        message: "Pet child successfully updated!",
+        updated_child: petChildForUpdate,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error });
+    }
+  }
+
+  if (req.method === "DELETE") {
+    try {
+      await PetChild.findByIdAndDelete(id);
+      console.log("Pet child successfully deleted via Mongoose!");
+      res.status(200).json({ message: "Pet child successfully deleted!" });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error });
+    }
+  }
 }
